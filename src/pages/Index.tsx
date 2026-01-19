@@ -1,13 +1,40 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import Navigation from "@/components/Navigation";
+import HeroSection from "@/components/sections/HeroSection";
+import ConceptSection from "@/components/sections/ConceptSection";
+import GoalsSection from "@/components/sections/GoalsSection";
+import CharacteristicsSection from "@/components/sections/CharacteristicsSection";
+import DrivingForcesSection from "@/components/sections/DrivingForcesSection";
+import PathwaySection from "@/components/sections/PathwaySection";
+import StatePartyEthicsSection from "@/components/sections/StatePartyEthicsSection";
+import SignificanceSection from "@/components/sections/SignificanceSection";
+import ConclusionSection from "@/components/sections/ConclusionSection";
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <main className="min-h-screen">
+      <Navigation />
+      <HeroSection />
+      <ConceptSection />
+      <div id="goals">
+        <GoalsSection />
       </div>
-    </div>
+      <div id="characteristics">
+        <CharacteristicsSection />
+      </div>
+      <div id="forces">
+        <DrivingForcesSection />
+      </div>
+      <div id="pathway">
+        <PathwaySection />
+      </div>
+      <div id="state">
+        <StatePartyEthicsSection />
+      </div>
+      <div id="significance">
+        <SignificanceSection />
+      </div>
+      <ConclusionSection />
+    </main>
   );
 };
 
