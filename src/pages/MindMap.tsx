@@ -19,34 +19,67 @@ import { Branch, MindMapNode } from "@/data/mindMapData";
 const MindMap = () => {
     const [selectedBranch, setSelectedBranch] = useState<Branch | null>(null);
     const [selectedNode, setSelectedNode] = useState<MindMapNode | null>(null);
+    const [expandedBranchId, setExpandedBranchId] = useState<string | null>(null);
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [isPresentationMode, setIsPresentationMode] = useState(false);
     const [zoom, setZoom] = useState(1);
     const [pan, setPan] = useState({ x: 0, y: 0 });
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Handle wheel zoom
+    // Handle wheel zoom - using window level with capture phase to intercept before browser
     useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-
         const handleWheel = (e: WheelEvent) => {
-            if (e.ctrlKey || e.metaKey) {
+            // Only handle if Ctrl or Meta key is pressed
+            if (!e.ctrlKey && !e.metaKey) return;
+
+            // Check if cursor is over the mind map container
+            const container = containerRef.current;
+            if (!container) {
+                return;
+            }
+
+            const rect = container.getBoundingClientRect();
+
+            const isOverContainer =
+                e.clientX >= rect.left &&
+                e.clientX <= rect.right &&
+                e.clientY >= rect.top &&
+                e.clientY <= rect.bottom;
+
+            if (isOverContainer) {
+                // Prevent browser's native zoom
                 e.preventDefault();
-                const delta = e.deltaY > 0 ? -0.1 : 0.1;
-                setZoom(z => Math.min(Math.max(0.5, z + delta), 2));
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+
+                // Calculate zoom change
+                const delta = e.deltaY > 0 ? -0.15 : 0.15;
+                setZoom(prevZoom => {
+                    const newZoom = Math.min(Math.max(0.5, prevZoom + delta), 2.5);
+                    return Math.round(newZoom * 100) / 100; // Round to 2 decimal places
+                });
             }
         };
 
-        container.addEventListener("wheel", handleWheel, { passive: false });
-        return () => container.removeEventListener("wheel", handleWheel);
+        // Use window with capture: true to intercept before any other handler
+        window.addEventListener("wheel", handleWheel, { passive: false, capture: true });
+        return () => window.removeEventListener("wheel", handleWheel, { capture: true });
     }, []);
 
     const handleSelectBranch = useCallback((branch: Branch) => {
-        setSelectedBranch(branch);
-        setSelectedNode(null);
-        setIsPanelOpen(true);
-    }, []);
+        // Toggle expand/collapse of child nodes
+        if (expandedBranchId === branch.id) {
+            // If already expanded, clicking again opens the panel
+            setSelectedBranch(branch);
+            setSelectedNode(null);
+            setIsPanelOpen(true);
+        } else {
+            // First click expands the child nodes
+            setExpandedBranchId(branch.id);
+            setSelectedBranch(branch);
+            setSelectedNode(null);
+        }
+    }, [expandedBranchId]);
 
     const handleSelectNode = useCallback((branch: Branch, node: MindMapNode) => {
         setSelectedBranch(branch);
@@ -58,9 +91,9 @@ const MindMap = () => {
         setIsPanelOpen(false);
     }, []);
 
-    const handleZoomIn = () => setZoom(z => Math.min(z + 0.2, 2));
+    const handleZoomIn = () => setZoom(z => Math.min(z + 0.2, 2.5));
     const handleZoomOut = () => setZoom(z => Math.max(z - 0.2, 0.5));
-    const handleReset = () => { setZoom(1); setPan({ x: 0, y: 0 }); };
+    const handleReset = () => { setZoom(1); setPan({ x: 0, y: 0 }); setExpandedBranchId(null); };
 
     const selectedId = selectedNode?.id || selectedBranch?.id || null;
 
@@ -148,6 +181,7 @@ const MindMap = () => {
                         onSelectBranch={handleSelectBranch}
                         onSelectNode={handleSelectNode}
                         selectedId={selectedId}
+                        expandedBranchId={expandedBranchId}
                         zoom={zoom}
                         pan={pan}
                     />
