@@ -1,0 +1,230 @@
+// Mind Map Data Structure for Ho Chi Minh's Ideology on Socialism
+
+export interface MindMapNode {
+    id: string;
+    title: string;
+    children?: MindMapNode[];
+    explanation: string;
+    example: string;
+    keyPoint: string;
+}
+
+export interface Branch {
+    id: string;
+    title: string;
+    color: string;
+    icon: string;
+    nodes: MindMapNode[];
+    explanation: string;
+    example: string;
+    keyPoint: string;
+}
+
+export const mindMapData: {
+    center: { title: string; subtitle: string };
+    branches: Branch[];
+} = {
+    center: {
+        title: "TƯ TƯỞNG HỒ CHÍ MINH",
+        subtitle: "VỀ CHỦ NGHĨA XÃ HỘI"
+    },
+    branches: [
+        {
+            id: "concept",
+            title: "Khái niệm CNXH",
+            color: "#FF6B6B",
+            icon: "💡",
+            explanation: "Theo Hồ Chí Minh, CNXH là chế độ xã hội ưu việt, lấy con người làm trung tâm, hướng tới sự phát triển toàn diện của mỗi cá nhân và cả cộng đồng.",
+            example: "Bác từng nói: 'CNXH là làm sao cho dân giàu, nước mạnh' - đơn giản và thực tiễn.",
+            keyPoint: "CNXH = Vì con người, do con người",
+            nodes: [
+                {
+                    id: "concept-1",
+                    title: "CNXH là gì?",
+                    explanation: "Là chế độ xã hội do nhân dân làm chủ, mọi người được sống trong hòa bình, tự do, hạnh phúc.",
+                    example: "Như một ngôi nhà chung, mọi người đều có quyền và trách nhiệm chăm lo cho nó.",
+                    keyPoint: "CNXH = Nhà chung của nhân dân"
+                },
+                {
+                    id: "concept-2",
+                    title: "Dân giàu, nước mạnh",
+                    explanation: "Mục tiêu cốt lõi: xây dựng một xã hội công bằng, dân chủ, văn minh.",
+                    example: "GDP bình quân đầu người tăng, an sinh xã hội đảm bảo cho mọi người.",
+                    keyPoint: "Dân giàu → Nước mạnh"
+                },
+                {
+                    id: "concept-3",
+                    title: "Bản chất nhân văn",
+                    explanation: "CNXH Việt Nam đặt con người ở vị trí trung tâm, mọi chính sách đều hướng về phục vụ nhân dân.",
+                    example: "Chính sách xóa đói giảm nghèo đã giúp hàng triệu người thoát nghèo.",
+                    keyPoint: "Con người là gốc"
+                }
+            ]
+        },
+        {
+            id: "goals",
+            title: "Mục tiêu CNXH",
+            color: "#4ECDC4",
+            icon: "🎯",
+            explanation: "CNXH hướng tới xây dựng một xã hội không còn áp bức bóc lột, mọi người được sống ấm no, hạnh phúc, bình đẳng.",
+            example: "Chương trình 'Nông thôn mới' đã cải thiện đáng kể đời sống nông dân.",
+            keyPoint: "Mục tiêu = Hạnh phúc toàn dân",
+            nodes: [
+                {
+                    id: "goals-1",
+                    title: "Kinh tế phát triển",
+                    explanation: "Xây dựng nền kinh tế độc lập, tự chủ, hội nhập quốc tế, phát triển bền vững.",
+                    example: "Việt Nam từ nước nghèo trở thành nước xuất khẩu gạo hàng đầu thế giới.",
+                    keyPoint: "Kinh tế = Nền tảng"
+                },
+                {
+                    id: "goals-2",
+                    title: "Đời sống ấm no",
+                    explanation: "Mọi người dân được đảm bảo nhu cầu cơ bản: ăn, mặc, ở, học hành, khám chữa bệnh.",
+                    example: "Bảo hiểm y tế toàn dân đã bao phủ trên 90% dân số.",
+                    keyPoint: "Ấm no = Quyền con người"
+                },
+                {
+                    id: "goals-3",
+                    title: "Công bằng xã hội",
+                    explanation: "Xóa bỏ áp bức bóc lột, mọi người bình đẳng trước pháp luật, được hưởng thành quả lao động của mình.",
+                    example: "Chính sách ưu đãi cho vùng sâu, vùng xa, đồng bào dân tộc thiểu số.",
+                    keyPoint: "Công bằng ≠ Cào bằng"
+                }
+            ]
+        },
+        {
+            id: "characteristics",
+            title: "Đặc trưng CNXH",
+            color: "#45B7D1",
+            icon: "⭐",
+            explanation: "CNXH Việt Nam có những đặc trưng riêng về kinh tế, chính trị, văn hóa - đạo đức phù hợp với điều kiện đất nước.",
+            example: "Kinh tế thị trường định hướng XHCN là mô hình độc đáo của Việt Nam.",
+            keyPoint: "Đặc trưng = DNA của CNXH VN",
+            nodes: [
+                {
+                    id: "char-1",
+                    title: "Kinh tế: Phát triển LLSX",
+                    explanation: "Phát triển lực lượng sản xuất, công nghiệp hóa, hiện đại hóa đất nước.",
+                    example: "Các khu công nghiệp, khu chế xuất thu hút đầu tư nước ngoài.",
+                    keyPoint: "LLSX = Động lực KT"
+                },
+                {
+                    id: "char-2",
+                    title: "Chính trị: Của dân, do dân, vì dân",
+                    explanation: "Nhà nước pháp quyền XHCN, quyền lực thuộc về nhân dân.",
+                    example: "Quốc hội do dân bầu, đại diện cho tiếng nói của nhân dân.",
+                    keyPoint: "Dân làm chủ"
+                },
+                {
+                    id: "char-3",
+                    title: "Văn hóa - Đạo đức",
+                    explanation: "Xây dựng con người mới XHCN: có đức, có tài, vừa hồng vừa chuyên.",
+                    example: "Phong trào 'Học tập và làm theo tư tưởng, đạo đức Hồ Chí Minh'.",
+                    keyPoint: "Con người mới = Hồng + Chuyên"
+                }
+            ]
+        },
+        {
+            id: "driving-forces",
+            title: "Động lực xây dựng",
+            color: "#96CEB4",
+            icon: "🚀",
+            explanation: "Động lực xây dựng CNXH bao gồm nhiều yếu tố, trong đó nhân dân là động lực quyết định.",
+            example: "Phong trào khởi nghiệp, đổi mới sáng tạo trong giới trẻ Việt Nam.",
+            keyPoint: "Nhân dân = Động lực số 1",
+            nodes: [
+                {
+                    id: "force-1",
+                    title: "Nhân dân là động lực quyết định",
+                    explanation: "Mọi thành tựu đều do nhân dân tạo ra, nhân dân là chủ thể của sự phát triển.",
+                    example: "Doanh nghiệp tư nhân đóng góp trên 40% GDP cả nước.",
+                    keyPoint: "Dân là gốc"
+                },
+                {
+                    id: "force-2",
+                    title: "Kết hợp lợi ích cá nhân - tập thể",
+                    explanation: "Hài hòa giữa lợi ích cá nhân và cộng đồng, khuyến khích làm giàu chính đáng.",
+                    example: "Doanh nhân thành đạt đóng góp từ thiện, xây dựng trường học, bệnh viện.",
+                    keyPoint: "Win-win: Cá nhân + Tập thể"
+                },
+                {
+                    id: "force-3",
+                    title: "Vai trò Khoa học - Kỹ thuật",
+                    explanation: "KHKT là then chốt để công nghiệp hóa, hiện đại hóa đất nước.",
+                    example: "Chuyển đổi số quốc gia, ứng dụng AI, công nghệ 4.0 trong các ngành.",
+                    keyPoint: "KHKT = Key Driver"
+                }
+            ]
+        },
+        {
+            id: "pathway",
+            title: "Con đường đi lên CNXH",
+            color: "#FFEAA7",
+            icon: "🛤️",
+            explanation: "Việt Nam đi lên CNXH từ một nước nông nghiệp lạc hậu, phải trải qua thời kỳ quá độ lâu dài.",
+            example: "Từ 1986 (Đổi mới), Việt Nam đã thoát khỏi khủng hoảng và phát triển mạnh mẽ.",
+            keyPoint: "Con đường = Quá độ + Sáng tạo",
+            nodes: [
+                {
+                    id: "path-1",
+                    title: "Quá độ từ nước nông nghiệp",
+                    explanation: "Không qua giai đoạn TBCN, đi thẳng lên CNXH với nhiều khó khăn cần vượt qua.",
+                    example: "Tỷ trọng nông nghiệp giảm từ 40% (1986) xuống còn 12% (2024).",
+                    keyPoint: "Bỏ qua TBCN = Đường tắt"
+                },
+                {
+                    id: "path-2",
+                    title: "Phù hợp điều kiện Việt Nam",
+                    explanation: "Vận dụng sáng tạo chủ nghĩa Mác-Lênin, không rập khuôn máy móc.",
+                    example: "Kinh tế thị trường định hướng XHCN - mô hình 'Made in Vietnam'.",
+                    keyPoint: "Sáng tạo = Linh hoạt"
+                },
+                {
+                    id: "path-3",
+                    title: "Độc lập gắn liền CNXH",
+                    explanation: "Không có độc lập dân tộc thì không thể xây dựng CNXH và ngược lại.",
+                    example: "Việt Nam kiên quyết bảo vệ chủ quyền biển đảo trong hội nhập quốc tế.",
+                    keyPoint: "Độc lập + CNXH = Một thể"
+                }
+            ]
+        },
+        {
+            id: "party-state",
+            title: "Vai trò Đảng & Nhà nước",
+            color: "#DDA0DD",
+            icon: "🏛️",
+            explanation: "Đảng lãnh đạo, Nhà nước quản lý, Nhân dân làm chủ - đây là cơ chế vận hành của CNXH Việt Nam.",
+            example: "Nghị quyết Đại hội Đảng → Chính sách Nhà nước → Nhân dân thực hiện và giám sát.",
+            keyPoint: "Đảng + Nhà nước + Dân = Tam giác quyền lực",
+            nodes: [
+                {
+                    id: "role-1",
+                    title: "Đảng lãnh đạo",
+                    explanation: "Đảng CSVN là lực lượng lãnh đạo Nhà nước và xã hội, định hướng phát triển đất nước.",
+                    example: "Nghị quyết về phát triển kinh tế số, chuyển đổi xanh của Đảng.",
+                    keyPoint: "Đảng = Kim chỉ nam"
+                },
+                {
+                    id: "role-2",
+                    title: "Nhà nước quản lý",
+                    explanation: "Nhà nước thể chế hóa đường lối của Đảng thành pháp luật, chính sách.",
+                    example: "Luật Doanh nghiệp, Luật Đầu tư tạo môi trường kinh doanh thuận lợi.",
+                    keyPoint: "Nhà nước = Bộ máy thực thi"
+                },
+                {
+                    id: "role-3",
+                    title: "Nhân dân làm chủ",
+                    explanation: "Nhân dân thực hiện quyền làm chủ thông qua dân chủ trực tiếp và gián tiếp.",
+                    example: "Cử tri bầu đại biểu Quốc hội, tham gia góp ý xây dựng pháp luật.",
+                    keyPoint: "Dân = Ông chủ thực sự"
+                }
+            ]
+        }
+    ]
+};
+
+export const getBranchColor = (branchId: string): string => {
+    const branch = mindMapData.branches.find(b => b.id === branchId);
+    return branch?.color || "#666";
+};
