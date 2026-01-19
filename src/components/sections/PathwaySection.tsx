@@ -1,6 +1,7 @@
 import { useInView } from "@/hooks/useInView";
 import { MapPin, Ban, Clock, Puzzle, ArrowRight, Star } from "lucide-react";
 import { motion } from "framer-motion";
+import pathwaySocialismArt from "@/assets/pathway-socialism-art.png";
 
 const steps = [
   {
@@ -35,7 +36,7 @@ const PathwaySection = () => {
   return (
     <section ref={ref} className="section-alt overflow-hidden relative">
       {/* Decorative stars */}
-      <motion.div 
+      <motion.div
         className="absolute top-20 right-20 text-gold/10"
         animate={{ rotate: 360, scale: [1, 1.1, 1] }}
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -43,8 +44,17 @@ const PathwaySection = () => {
         <Star className="w-40 h-40 fill-current" />
       </motion.div>
 
+      {/* Floating Artistic Image */}
+      <motion.div
+        className="absolute -left-10 top-1/2 -translate-y-1/2 w-48 h-48 opacity-20 pointer-events-none hidden lg:block"
+        animate={{ y: [0, -20, 0], rotate: [0, 3, 0, -3, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <img src={pathwaySocialismArt} alt="" className="w-full h-full object-contain rounded-2xl" />
+      </motion.div>
+
       <div className="section-container relative z-10">
-        <motion.div 
+        <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -62,7 +72,7 @@ const PathwaySection = () => {
 
         <div className="relative">
           {/* Connection line for desktop */}
-          <motion.div 
+          <motion.div
             className="hidden md:block absolute top-20 left-0 right-0 h-1 z-0"
             initial={{ scaleX: 0 }}
             animate={isInView ? { scaleX: 1 } : {}}
@@ -71,7 +81,7 @@ const PathwaySection = () => {
           >
             <div className="w-full h-full bg-gradient-to-r from-gold via-primary to-gold rounded-full" />
           </motion.div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative z-10">
             {steps.map((step, index) => (
               <motion.div
@@ -80,7 +90,7 @@ const PathwaySection = () => {
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: 0.2 + index * 0.15, duration: 0.6 }}
               >
-                <motion.div 
+                <motion.div
                   className="feature-card text-center h-full golden-border hover:border-gold/50 relative group"
                   whileHover={{ scale: 1.05, y: -10 }}
                 >
@@ -96,21 +106,21 @@ const PathwaySection = () => {
                     </div>
                   )}
 
-                  <motion.div 
+                  <motion.div
                     className="w-14 h-14 mx-auto mb-4 rounded-full bg-gradient-to-br from-gold to-primary flex items-center justify-center text-primary-foreground font-bold text-xl font-sans shadow-lg"
                     whileHover={{ rotate: 360, scale: 1.1 }}
                     transition={{ duration: 0.5 }}
                   >
                     {step.number}
                   </motion.div>
-                  
+
                   <motion.div
                     className="w-10 h-10 mx-auto mb-3 rounded-lg bg-primary/10 group-hover:bg-primary flex items-center justify-center transition-all"
                     whileHover={{ rotate: 10 }}
                   >
                     <step.icon className="w-5 h-5 text-primary group-hover:text-primary-foreground transition-colors" />
                   </motion.div>
-                  
+
                   <h3 className="text-base font-bold text-foreground mb-2 font-sans">{step.title}</h3>
                   <p className="text-sm text-muted-foreground">{step.description}</p>
                 </motion.div>

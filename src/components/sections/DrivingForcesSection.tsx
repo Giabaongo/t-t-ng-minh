@@ -1,6 +1,7 @@
 import { useInView } from "@/hooks/useInView";
 import { Users, HandHeart, GraduationCap, Building2, Star } from "lucide-react";
 import { motion } from "framer-motion";
+import drivingForcesArt from "@/assets/driving-forces-art.png";
 
 const forces = [
   {
@@ -38,8 +39,17 @@ const DrivingForcesSection = () => {
         }} />
       </div>
 
+      {/* Floating Artistic Image */}
+      <motion.div
+        className="absolute -left-16 bottom-20 w-64 h-64 opacity-15 pointer-events-none"
+        animate={{ rotate: [0, -5, 0, 5, 0], scale: [1, 1.05, 1, 0.95, 1] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <img src={drivingForcesArt} alt="" className="w-full h-full object-contain rounded-3xl" />
+      </motion.div>
+
       <div className="section-container relative z-10">
-        <motion.div 
+        <motion.div
           className="text-center mb-12"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -57,7 +67,7 @@ const DrivingForcesSection = () => {
 
         <div className="relative max-w-3xl mx-auto">
           {/* Animated timeline line */}
-          <motion.div 
+          <motion.div
             className="absolute left-6 top-0 bottom-0 w-1 rounded-full overflow-hidden"
             initial={{ scaleY: 0 }}
             animate={isInView ? { scaleY: 1 } : {}}
@@ -66,7 +76,7 @@ const DrivingForcesSection = () => {
           >
             <div className="w-full h-full bg-gradient-to-b from-gold via-primary to-gold" />
           </motion.div>
-          
+
           {forces.map((force, index) => (
             <motion.div
               key={index}
@@ -76,26 +86,26 @@ const DrivingForcesSection = () => {
               transition={{ delay: 0.3 + index * 0.2, duration: 0.6 }}
             >
               {/* Animated dot */}
-              <motion.div 
+              <motion.div
                 className="absolute left-3.5 w-5 h-5 rounded-full bg-gold border-4 border-background"
                 style={{ top: "8px" }}
                 initial={{ scale: 0 }}
                 animate={isInView ? { scale: 1 } : {}}
                 transition={{ delay: 0.4 + index * 0.2, type: "spring" }}
               >
-                <motion.div 
+                <motion.div
                   className="absolute inset-0 rounded-full bg-gold"
                   animate={{ scale: [1, 1.5, 1], opacity: [1, 0, 1] }}
                   transition={{ duration: 2, repeat: Infinity, delay: index * 0.3 }}
                 />
               </motion.div>
 
-              <motion.div 
+              <motion.div
                 className="feature-card golden-border hover:border-gold/50 group"
                 whileHover={{ scale: 1.02, x: 10 }}
               >
                 <div className="flex items-center gap-4 mb-3">
-                  <motion.div 
+                  <motion.div
                     className="w-12 h-12 rounded-xl bg-primary/10 group-hover:bg-primary flex items-center justify-center transition-colors"
                     whileHover={{ rotate: 10 }}
                   >
@@ -109,7 +119,7 @@ const DrivingForcesSection = () => {
           ))}
         </div>
 
-        <motion.blockquote 
+        <motion.blockquote
           className="quote-block max-w-2xl mx-auto mt-12 golden-border rounded-lg text-center"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={isInView ? { opacity: 1, scale: 1 } : {}}

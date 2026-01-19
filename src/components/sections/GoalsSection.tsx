@@ -2,6 +2,7 @@ import { useInView } from "@/hooks/useInView";
 import { Target, Lightbulb, GraduationCap, HeartHandshake, Stethoscope, User, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import revolutionBg from "@/assets/revolution-abstract.jpg";
+import socialistGoalsArt from "@/assets/socialist-goals-art.png";
 
 const GoalsSection = () => {
   const { ref, isInView } = useInView();
@@ -9,13 +10,22 @@ const GoalsSection = () => {
   return (
     <section ref={ref} className="relative overflow-hidden">
       {/* Background Image */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center opacity-5"
         style={{ backgroundImage: `url(${revolutionBg})` }}
       />
-      
+
+      {/* Floating Artistic Image */}
+      <motion.div
+        className="absolute -right-20 top-10 w-72 h-72 opacity-20 pointer-events-none"
+        animate={{ rotate: [0, 5, 0, -5, 0], y: [0, -10, 0, 10, 0] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <img src={socialistGoalsArt} alt="" className="w-full h-full object-contain rounded-3xl" />
+      </motion.div>
+
       <div className="section-container relative z-10">
-        <motion.div 
+        <motion.div
           className="text-center mb-12"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -32,7 +42,7 @@ const GoalsSection = () => {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          <motion.div 
+          <motion.div
             className="feature-card golden-border hover:border-gold/50 relative overflow-hidden group"
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -41,7 +51,7 @@ const GoalsSection = () => {
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-500" />
             <div className="flex items-center gap-3 mb-4 relative z-10">
-              <motion.div 
+              <motion.div
                 className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center"
                 whileHover={{ rotate: 10 }}
               >
@@ -54,7 +64,7 @@ const GoalsSection = () => {
                 "Giải phóng con người khỏi nghèo đói, bất công, lạc hậu",
                 "Nâng cao đời sống vật chất và tinh thần"
               ].map((text, i) => (
-                <motion.li 
+                <motion.li
                   key={i}
                   className="flex items-start gap-3"
                   initial={{ opacity: 0, x: -20 }}
@@ -68,7 +78,7 @@ const GoalsSection = () => {
             </ul>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="feature-card golden-border hover:border-gold/50 relative overflow-hidden group"
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -77,7 +87,7 @@ const GoalsSection = () => {
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-500" />
             <div className="flex items-center gap-3 mb-4 relative z-10">
-              <motion.div 
+              <motion.div
                 className="w-12 h-12 rounded-xl bg-gold flex items-center justify-center"
                 whileHover={{ rotate: 10 }}
               >
@@ -92,7 +102,7 @@ const GoalsSection = () => {
                 { icon: GraduationCap, text: "Giáo dục – văn hóa" },
                 { icon: Stethoscope, text: "Y tế – sức khỏe" }
               ].map((item, i) => (
-                <motion.div 
+                <motion.div
                   key={i}
                   className="flex items-center gap-2 p-2 rounded-lg hover:bg-primary/5 transition-colors"
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -108,7 +118,7 @@ const GoalsSection = () => {
           </motion.div>
         </div>
 
-        <motion.p 
+        <motion.p
           className="text-center text-lg text-muted-foreground mt-10 italic max-w-2xl mx-auto golden-border rounded-lg p-4 bg-card/50"
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
