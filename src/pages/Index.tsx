@@ -46,7 +46,7 @@ const Index = () => {
       <div id="significance">
         <SignificanceSection />
       </div>
-
+      
       <div id="conclusion">
         <ConclusionSection />
       </div>
@@ -57,3 +57,4 @@ const Index = () => {
 
 
 export default Index;
+
