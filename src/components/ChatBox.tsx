@@ -82,7 +82,7 @@ const ChatBox = () => {
     const [messages, setMessages] = useState<Message[]>([
         {
             id: 1,
-            text: "Xin chào! 👋 Tôi là trợ lý AI của bài thuyết trình. Hãy hỏi tôi về Tư tưởng Hồ Chí Minh về Chủ nghĩa Xã hội!",
+            text: "Xin chào! 👋 Tôi là trợ lý AI của trang web này. Hãy hỏi tôi về Tư tưởng Hồ Chí Minh về Chủ nghĩa Xã hội!",
             isBot: true,
             timestamp: new Date()
         }
@@ -182,14 +182,14 @@ const ChatBox = () => {
                                     className={`flex gap-2 ${message.isBot ? "" : "flex-row-reverse"}`}
                                 >
                                     <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center ${message.isBot
-                                            ? "bg-red-100 text-red-600"
-                                            : "bg-blue-100 text-blue-600"
+                                        ? "bg-red-100 text-red-600"
+                                        : "bg-blue-100 text-blue-600"
                                         }`}>
                                         {message.isBot ? <Bot className="w-4 h-4" /> : <User className="w-4 h-4" />}
                                     </div>
                                     <div className={`max-w-[75%] p-3 rounded-2xl text-sm whitespace-pre-line ${message.isBot
-                                            ? "bg-white text-gray-800 rounded-tl-none shadow-sm"
-                                            : "bg-red-600 text-white rounded-tr-none"
+                                        ? "bg-white text-gray-800 rounded-tl-none shadow-sm"
+                                        : "bg-red-600 text-white rounded-tr-none"
                                         }`}>
                                         {message.text}
                                     </div>
