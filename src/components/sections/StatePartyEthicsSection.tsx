@@ -1,6 +1,7 @@
 import { useInView } from "@/hooks/useInView";
 import { Building, Award, Heart, Star } from "lucide-react";
 import { motion } from "framer-motion";
+import ethicsLeadershipArt from "@/assets/ethics-leadership-art.png";
 
 const cards = [
   {
@@ -31,8 +32,17 @@ const StatePartyEthicsSection = () => {
 
   return (
     <section ref={ref} className="bg-background relative overflow-hidden">
+      {/* Floating Artistic Image */}
+      <motion.div
+        className="absolute right-0 top-1/2 -translate-y-1/2 w-56 h-56 opacity-15 pointer-events-none hidden lg:block"
+        animate={{ x: [0, 10, 0], scale: [1, 1.03, 1] }}
+        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <img src={ethicsLeadershipArt} alt="" className="w-full h-full object-contain rounded-2xl" />
+      </motion.div>
+
       <div className="section-container relative z-10">
-        <motion.div 
+        <motion.div
           className="text-center mb-12"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -57,7 +67,7 @@ const StatePartyEthicsSection = () => {
               transition={{ delay: index * 0.15 }}
               whileHover={{ scale: 1.03, y: -5 }}
             >
-              <motion.div 
+              <motion.div
                 className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${card.accent ? "bg-gold/20" : "bg-primary/10"}`}
                 whileHover={{ rotate: 10 }}
               >
