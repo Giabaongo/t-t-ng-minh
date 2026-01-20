@@ -114,14 +114,6 @@ const HeroSection = () => {
           >
             ★ Bắt đầu tìm hiểu
           </Button>
-
-          <Button 
-            onClick={() => window.open("https://whack-a-mole-xi-blush.vercel.app", "_blank")}
-            size="lg"
-            className="rounded-full mx-4 px-10 py-7 text-base font-medium bg-gold hover:bg-gold-light text-revolutionary-dark shadow-lg hover:shadow-2xl transition-all duration-300 glow-pulse border-2 border-gold-light/30"
-          >
-            Trò chơi
-          </Button>
         </motion.div>
       </div>
       

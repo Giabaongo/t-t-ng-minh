@@ -12,7 +12,7 @@ const GoalsSection = () => {
     <section ref={ref} className="relative overflow-hidden">
       {/* Background Image */}
       <div 
-        className="absolute inset-0 bg-cover bg-center opacity-5"
+        className="absolute inset-0 bg-cover bg-center opacity-15"
         style={{ backgroundImage: `url(${revolutionBg})` }}
       />
       
