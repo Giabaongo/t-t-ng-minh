@@ -25,7 +25,12 @@ const MindMapCanvas = ({
     const centerX = 500;
     const centerY = 350;
     const branchRadius = 160;
-    const nodeDistance = 110; // Distance from branch to nodes
+    const nodeDistance = 160; // Distance from branch to nodes (increased for better spacing)
+    const nodeWidth = 140;
+    const nodeHeight = 36;
+    const branchWidth = 150;
+    const branchHeight = 56;
+    const centerRadius = 60; // Center node radius
 
     // Calculate branch positions in a circle
     const getBranchPosition = (index: number, total: number) => {
@@ -58,12 +63,103 @@ const MindMapCanvas = ({
 
         const finalAngle = outwardAngle + nodeAngleOffset;
 
-        // All nodes at same distance, but we can vary slightly for visual interest
-        const distance = nodeDistance + (Math.abs(nodeAngleOffset) > 0.3 ? 10 : 0);
+        // Increased base distance for better spacing
+        const distance = nodeDistance + (Math.abs(nodeAngleOffset) > 0.3 ? 20 : 0);
 
         return {
             x: branchPos.x + Math.cos(finalAngle) * distance,
-            y: branchPos.y + Math.sin(finalAngle) * distance
+            y: branchPos.y + Math.sin(finalAngle) * distance,
+            angle: finalAngle // Return angle for edge calculation
+        };
+    };
+
+    // Calculate the point on node edge closest to the branch
+    const getNodeEdgePoint = (nodeCenter: { x: number; y: number; angle?: number }, branchPos: { x: number; y: number }) => {
+        // Direction from node center to branch
+        const dx = branchPos.x - nodeCenter.x;
+        const dy = branchPos.y - nodeCenter.y;
+        const length = Math.sqrt(dx * dx + dy * dy);
+
+        if (length === 0) return { x: nodeCenter.x, y: nodeCenter.y };
+
+        // Normalize direction
+        const dirX = dx / length;
+        const dirY = dy / length;
+
+        // Node dimensions (half sizes)
+        const halfWidth = nodeWidth / 2;  // 70
+        const halfHeight = nodeHeight / 2;  // 18
+
+        // Calculate intersection with rectangle edge
+        // We need to find t such that the ray from center hits the edge
+        let t: number;
+
+        if (Math.abs(dirX) > 0.001 && Math.abs(dirY) > 0.001) {
+            // General case: calculate t for both x and y edges
+            const tX = halfWidth / Math.abs(dirX);
+            const tY = halfHeight / Math.abs(dirY);
+            t = Math.min(tX, tY);
+        } else if (Math.abs(dirX) > 0.001) {
+            // Mostly horizontal
+            t = halfWidth / Math.abs(dirX);
+        } else {
+            // Mostly vertical
+            t = halfHeight / Math.abs(dirY);
+        }
+
+        return {
+            x: nodeCenter.x + dirX * t,
+            y: nodeCenter.y + dirY * t
+        };
+    };
+
+    // Calculate the point on branch node edge closest to the center
+    const getBranchEdgePoint = (branchPos: { x: number; y: number }, fromX: number, fromY: number) => {
+        // Direction from branch to center
+        const dx = fromX - branchPos.x;
+        const dy = fromY - branchPos.y;
+        const length = Math.sqrt(dx * dx + dy * dy);
+
+        if (length === 0) return { x: branchPos.x, y: branchPos.y };
+
+        // Normalize direction
+        const dirX = dx / length;
+        const dirY = dy / length;
+
+        // Branch node dimensions (half sizes)
+        const halfWidth = branchWidth / 2;  // 75
+        const halfHeight = branchHeight / 2;  // 28
+
+        // Calculate intersection with rounded rectangle edge
+        let t: number;
+
+        if (Math.abs(dirX) > 0.001 && Math.abs(dirY) > 0.001) {
+            const tX = halfWidth / Math.abs(dirX);
+            const tY = halfHeight / Math.abs(dirY);
+            t = Math.min(tX, tY);
+        } else if (Math.abs(dirX) > 0.001) {
+            t = halfWidth / Math.abs(dirX);
+        } else {
+            t = halfHeight / Math.abs(dirY);
+        }
+
+        return {
+            x: branchPos.x + dirX * t,
+            y: branchPos.y + dirY * t
+        };
+    };
+
+    // Calculate point on center circle edge
+    const getCenterEdgePoint = (branchPos: { x: number; y: number }) => {
+        const dx = branchPos.x - centerX;
+        const dy = branchPos.y - centerY;
+        const length = Math.sqrt(dx * dx + dy * dy);
+
+        if (length === 0) return { x: centerX, y: centerY };
+
+        return {
+            x: centerX + (dx / length) * centerRadius,
+            y: centerY + (dy / length) * centerRadius
         };
     };
 
@@ -96,13 +192,16 @@ const MindMapCanvas = ({
                 {/* Connection lines from center to branches */}
                 {mindMapData.branches.map((branch, i) => {
                     const pos = getBranchPosition(i, mindMapData.branches.length);
+                    // Calculate edge points for both center and branch
+                    const centerEdge = getCenterEdgePoint(pos);
+                    const branchEdge = getBranchEdgePoint(pos, centerX, centerY);
                     return (
                         <motion.line
                             key={`line-${branch.id}`}
-                            x1={centerX}
-                            y1={centerY}
-                            x2={pos.x}
-                            y2={pos.y}
+                            x1={centerEdge.x}
+                            y1={centerEdge.y}
+                            x2={branchEdge.x}
+                            y2={branchEdge.y}
                             stroke={branch.color}
                             strokeWidth={3}
                             strokeLinecap="round"
@@ -120,13 +219,16 @@ const MindMapCanvas = ({
                     const branchPos = getBranchPosition(branchIndex, mindMapData.branches.length);
                     return branch.nodes.map((node, nodeIndex) => {
                         const nodePos = getNodePosition(branchPos, nodeIndex, branch.nodes.length, branchIndex);
+                        // Calculate edge points for both branch and node
+                        const branchEdgeToNode = getBranchEdgePoint(branchPos, nodePos.x, nodePos.y);
+                        const nodeEdge = getNodeEdgePoint(nodePos, branchPos);
                         return (
                             <motion.line
                                 key={`node-line-${node.id}`}
-                                x1={branchPos.x}
-                                y1={branchPos.y}
-                                x2={nodePos.x}
-                                y2={nodePos.y}
+                                x1={branchEdgeToNode.x}
+                                y1={branchEdgeToNode.y}
+                                x2={nodeEdge.x}
+                                y2={nodeEdge.y}
                                 stroke={branch.color}
                                 strokeWidth={2}
                                 strokeLinecap="round"
