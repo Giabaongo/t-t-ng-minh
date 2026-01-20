@@ -8,6 +8,7 @@ import PathwaySection from "@/components/sections/PathwaySection";
 import StatePartyEthicsSection from "@/components/sections/StatePartyEthicsSection";
 import SignificanceSection from "@/components/sections/SignificanceSection";
 import ConclusionSection from "@/components/sections/ConclusionSection";
+import ChatBox from "@/components/ChatBox";
 
 const Index = () => {
   return (
@@ -34,8 +35,10 @@ const Index = () => {
         <SignificanceSection />
       </div>
       <ConclusionSection />
+      <ChatBox />
     </main>
   );
 };
 
 export default Index;
+
