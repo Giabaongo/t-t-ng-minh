@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Map } from "lucide-react";
+import { Menu, X, Map, Gamepad2 } from "lucide-react";
 
 const sections = [
   { id: "section-2", label: "Quan niệm" },
@@ -63,6 +63,15 @@ const Navigation = () => {
             <Map className="w-4 h-4" />
             Mind Map
           </Link>
+          <a
+            href="https://whack-a-mole-xi-blush.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-sm font-medium text-green-500 hover:text-green-400 transition-colors"
+          >
+            <Gamepad2 className="w-4 h-4" />
+            Mini Game
+          </a>
         </div>
 
         {/* Mobile menu button */}
@@ -94,6 +103,16 @@ const Navigation = () => {
             <Map className="w-4 h-4" />
             Mind Map
           </Link>
+          <a
+            href="https://whack-a-mole-xi-blush.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-green-500 hover:text-green-400 transition-colors py-2 font-medium"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <Gamepad2 className="w-4 h-4" />
+            Mini Game
+          </a>
         </div>
       )}
     </nav>
