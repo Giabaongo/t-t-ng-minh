@@ -2,6 +2,8 @@ import { useInView } from "@/hooks/useInView";
 import { Users, HandHeart, GraduationCap, Building2, Star } from "lucide-react";
 import { motion } from "framer-motion";
 
+const myDrivingForcesImage = "https://res.cloudinary.com/dgds0gqq1/image/upload/v1768836135/images1313127_1_jo82bc.jpg"; // Thay null bằng hình ảnh của bạn
+
 const forces = [
   {
     icon: Users,
@@ -55,58 +57,50 @@ const DrivingForcesSection = () => {
           </h2>
         </motion.div>
 
-        <div className="relative max-w-3xl mx-auto">
-          {/* Animated timeline line */}
-          <motion.div 
-            className="absolute left-6 top-0 bottom-0 w-1 rounded-full overflow-hidden"
-            initial={{ scaleY: 0 }}
-            animate={isInView ? { scaleY: 1 } : {}}
-            transition={{ duration: 1, delay: 0.2 }}
-            style={{ originY: 0 }}
-          >
-            <div className="w-full h-full bg-gradient-to-b from-gold via-primary to-gold" />
-          </motion.div>
-          
-          {forces.map((force, index) => (
-            <motion.div
-              key={index}
-              className="relative pl-16 pb-10 last:pb-0"
+        {/* Layout 2 cột: Ảnh bên trái, Nội dung bên phải */}
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          {/* Cột hình ảnh */}
+          {myDrivingForcesImage && (
+            <motion.div 
               initial={{ opacity: 0, x: -50 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ delay: 0.3 + index * 0.2, duration: 0.6 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
             >
-              {/* Animated dot */}
-              <motion.div 
-                className="absolute left-3.5 w-5 h-5 rounded-full bg-gold border-4 border-background"
-                style={{ top: "8px" }}
-                initial={{ scale: 0 }}
-                animate={isInView ? { scale: 1 } : {}}
-                transition={{ delay: 0.4 + index * 0.2, type: "spring" }}
-              >
-                <motion.div 
-                  className="absolute inset-0 rounded-full bg-gold"
-                  animate={{ scale: [1, 1.5, 1], opacity: [1, 0, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, delay: index * 0.3 }}
+              <div className="relative rounded-2xl overflow-hidden golden-border aspect-video">
+                <img 
+                  src={myDrivingForcesImage}
+                  alt="Động lực xây dựng CNXH"
+                  className="w-full h-full object-cover"
                 />
-              </motion.div>
+              </div>
+            </motion.div>
+          )}
 
-              <motion.div 
-                className="feature-card golden-border hover:border-gold/50 group"
-                whileHover={{ scale: 1.02, x: 10 }}
+          {/* Cột nội dung */}
+          <div className="space-y-6">
+            {forces.map((force, index) => (
+              <motion.div
+                key={index}
+                className="feature-card golden-border hover:border-gold/50 group relative overflow-hidden"
+                initial={{ opacity: 0, x: 50 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ delay: 0.3 + index * 0.15, duration: 0.6 }}
+                whileHover={{ scale: 1.02 }}
               >
-                <div className="flex items-center gap-4 mb-3">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-500" />
+                <div className="flex items-center gap-4 mb-3 relative z-10">
                   <motion.div 
                     className="w-12 h-12 rounded-xl bg-primary/10 group-hover:bg-primary flex items-center justify-center transition-colors"
                     whileHover={{ rotate: 10 }}
                   >
                     <force.icon className="w-6 h-6 text-primary group-hover:text-primary-foreground transition-colors" />
                   </motion.div>
-                  <h3 className="text-xl font-bold text-foreground font-sans">{force.title}</h3>
+                  <h3 className="text-lg font-bold text-foreground font-sans">{force.title}</h3>
                 </div>
-                <p className="text-muted-foreground">{force.description}</p>
+                <p className="text-muted-foreground text-sm relative z-10">{force.description}</p>
               </motion.div>
-            </motion.div>
-          ))}
+            ))}
+          </div>
         </div>
 
         <motion.blockquote 

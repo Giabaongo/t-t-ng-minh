@@ -2,6 +2,12 @@ import { useInView } from "@/hooks/useInView";
 import { Compass, Scale, Building2, GraduationCap, Star } from "lucide-react";
 import { motion } from "framer-motion";
 
+// ============================================
+// THÊM HÌNH ẢNH CỦA BẠN Ở ĐÂY
+// ============================================
+// Ví dụ: import mySignificanceImage from "@/assets/significance-image.jpg";
+const mySignificanceImage = "https://res.cloudinary.com/dgds0gqq1/image/upload/v1768836088/b02dcd4c02f18573cfa972558c3c5c99l_DXWR_wsj9zt.jpg"; // Thay null bằng hình ảnh của bạn
+
 const significances = [
   { icon: Compass, text: "Giá trị định hướng phát triển đất nước" },
   { icon: Scale, text: "Gắn phát triển kinh tế với công bằng xã hội" },
@@ -27,6 +33,26 @@ const SignificanceSection = () => {
             Ý nghĩa <span className="text-primary">hiện nay</span>
           </h2>
         </motion.div>
+
+        {/* ============================================ */}
+        {/* KHU VỰC HÌNH ẢNH - Thêm hình của bạn ở đây */}
+        {/* ============================================ */}
+        {mySignificanceImage && (
+          <motion.div 
+            className="mb-12 max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <div className="relative rounded-2xl overflow-hidden golden-border aspect-video">
+              <img 
+                src={mySignificanceImage}
+                alt="Ý nghĩa hiện nay"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </motion.div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {significances.map((item, index) => (
