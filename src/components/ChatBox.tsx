@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Bot, User } from "lucide-react";
+import { MessageCircle, X, Send, Bot, User, Loader2 } from "lucide-react";
 
 interface Message {
     id: number;
@@ -9,72 +9,98 @@ interface Message {
     timestamp: Date;
 }
 
-// Knowledge base về nội dung trang web
-const knowledgeBase = {
-    greetings: [
-        "Xin chào! Tôi là trợ lý AI của bài thuyết trình về Tư tưởng Hồ Chí Minh về Chủ nghĩa Xã hội. Bạn có thể hỏi tôi về các chủ đề như: khái niệm CNXH, mục tiêu, đặc trưng, động lực xây dựng, con đường đi lên CNXH, vai trò Đảng và Nhà nước.",
-    ],
-    topics: {
-        "cnxh|chủ nghĩa xã hội|khái niệm": {
-            answer: "Theo Hồ Chí Minh, CNXH là chế độ xã hội ưu việt, lấy con người làm trung tâm, hướng tới sự phát triển toàn diện của mỗi cá nhân và cả cộng đồng. Bác từng nói: 'CNXH là làm sao cho dân giàu, nước mạnh'.",
-            keywords: ["khái niệm", "định nghĩa", "là gì"]
+// System prompt để giới hạn chatbot chỉ trả lời về nội dung bài thuyết trình
+const SYSTEM_PROMPT = `Bạn là trợ lý AI chuyên về bài thuyết trình "Tư tưởng Hồ Chí Minh về Chủ nghĩa Xã hội".
+
+CHỈ trả lời các câu hỏi liên quan đến các chủ đề sau:
+1. Khái niệm CNXH theo Hồ Chí Minh: CNXH là chế độ xã hội ưu việt, lấy con người làm trung tâm, "dân giàu nước mạnh"
+2. Mục tiêu CNXH: Kinh tế phát triển, đời sống ấm no, công bằng xã hội
+3. Đặc trưng CNXH Việt Nam: Phát triển lực lượng sản xuất, nhà nước của dân-do dân-vì dân, văn hóa đạo đức "hồng chuyên"
+4. Động lực xây dựng CNXH: Nhân dân là động lực quyết định, kết hợp lợi ích cá nhân-tập thể, vai trò khoa học kỹ thuật
+5. Con đường đi lên CNXH: Quá độ từ nước nông nghiệp, phù hợp điều kiện Việt Nam, độc lập gắn liền CNXH
+6. Vai trò Đảng và Nhà nước: Đảng lãnh đạo, Nhà nước quản lý, Nhân dân làm chủ
+
+Nếu câu hỏi KHÔNG liên quan đến các chủ đề trên, hãy lịch sự từ chối và hướng dẫn người dùng hỏi về nội dung bài thuyết trình.
+
+Trả lời bằng tiếng Việt, ngắn gọn, súc tích (tối đa 200 từ). Sử dụng bullet points khi cần thiết.`;
+
+// Gemini API call function
+const callGeminiAPI = async (userMessage: string, conversationHistory: Message[]): Promise<string> => {
+    const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+
+    if (!API_KEY) {
+        return "⚠️ Chưa cấu hình API key. Vui lòng thêm VITE_GEMINI_API_KEY vào file .env";
+    }
+
+    // Build conversation context
+    const contents = [
+        {
+            role: "user",
+            parts: [{ text: SYSTEM_PROMPT }]
         },
-        "mục tiêu|mục đích|hướng tới": {
-            answer: "Mục tiêu của CNXH theo tư tưởng Hồ Chí Minh gồm:\n• Kinh tế phát triển bền vững\n• Đời sống nhân dân ấm no, hạnh phúc\n• Công bằng xã hội - xóa bỏ áp bức bóc lột\n\nVí dụ: Chương trình 'Nông thôn mới' đã cải thiện đáng kể đời sống nông dân.",
-            keywords: ["mục tiêu", "mục đích", "hướng tới"]
+        {
+            role: "model",
+            parts: [{ text: "Tôi hiểu. Tôi sẽ chỉ trả lời các câu hỏi liên quan đến bài thuyết trình Tư tưởng Hồ Chí Minh về Chủ nghĩa Xã hội." }]
         },
-        "đặc trưng|đặc điểm|riêng biệt": {
-            answer: "Đặc trưng của CNXH Việt Nam:\n• Kinh tế: Phát triển lực lượng sản xuất, CNH-HĐH\n• Chính trị: Của dân, do dân, vì dân\n• Văn hóa - Đạo đức: Xây dựng con người mới 'vừa hồng vừa chuyên'\n\nKinh tế thị trường định hướng XHCN là mô hình độc đáo của Việt Nam.",
-            keywords: ["đặc trưng", "đặc điểm"]
-        },
-        "động lực|xây dựng|phát triển": {
-            answer: "Động lực xây dựng CNXH:\n• Nhân dân là động lực quyết định (dân là gốc)\n• Kết hợp lợi ích cá nhân và tập thể (win-win)\n• Khoa học - Kỹ thuật là then chốt\n\nVí dụ: Doanh nghiệp tư nhân đóng góp trên 40% GDP cả nước.",
-            keywords: ["động lực", "xây dựng"]
-        },
-        "con đường|quá độ|đi lên": {
-            answer: "Con đường đi lên CNXH của Việt Nam:\n• Quá độ từ nước nông nghiệp lạc hậu, bỏ qua giai đoạn TBCN\n• Phù hợp với điều kiện Việt Nam - vận dụng sáng tạo\n• Độc lập dân tộc gắn liền với CNXH\n\nTừ 1986 (Đổi mới), Việt Nam đã thoát khỏi khủng hoảng và phát triển mạnh mẽ.",
-            keywords: ["con đường", "quá độ"]
-        },
-        "đảng|nhà nước|vai trò|lãnh đạo": {
-            answer: "Vai trò Đảng và Nhà nước:\n• Đảng lãnh đạo: Kim chỉ nam định hướng phát triển\n• Nhà nước quản lý: Thể chế hóa đường lối thành pháp luật\n• Nhân dân làm chủ: Thực hiện quyền làm chủ trực tiếp và gián tiếp\n\nĐây là cơ chế: Đảng + Nhà nước + Dân = Tam giác quyền lực.",
-            keywords: ["đảng", "nhà nước", "vai trò"]
-        },
-        "hồ chí minh|bác hồ|chủ tịch": {
-            answer: "Hồ Chí Minh (1890-1969) là nhà cách mạng, lãnh tụ vĩ đại của dân tộc Việt Nam. Người đã vận dụng sáng tạo chủ nghĩa Mác-Lênin vào điều kiện cụ thể của Việt Nam, xây dựng hệ thống tư tưởng về CNXH mang đậm bản sắc Việt Nam.",
-            keywords: ["hồ chí minh", "bác hồ"]
-        },
-        "mind map|sơ đồ tư duy|bản đồ": {
-            answer: "Bạn có thể xem Mind Map tổng quan về Tư tưởng Hồ Chí Minh về CNXH bằng cách click vào 'Mind Map' trên thanh navigation. Mind Map gồm 6 nhánh chính:\n• Khái niệm CNXH\n• Mục tiêu CNXH\n• Đặc trưng CNXH\n• Động lực xây dựng\n• Con đường đi lên CNXH\n• Vai trò Đảng & Nhà nước",
-            keywords: ["mind map", "sơ đồ"]
+        // Add conversation history (last 6 messages for context)
+        ...conversationHistory.slice(-6).map(msg => ({
+            role: msg.isBot ? "model" : "user",
+            parts: [{ text: msg.text }]
+        })),
+        // Add current user message
+        {
+            role: "user",
+            parts: [{ text: userMessage }]
         }
-    },
-    fallback: "Xin lỗi, tôi chỉ có thể trả lời các câu hỏi liên quan đến nội dung bài thuyết trình về Tư tưởng Hồ Chí Minh về Chủ nghĩa Xã hội. Bạn có thể hỏi về:\n• Khái niệm CNXH\n• Mục tiêu CNXH\n• Đặc trưng CNXH\n• Động lực xây dựng\n• Con đường đi lên CNXH\n• Vai trò Đảng và Nhà nước"
-};
+    ];
 
-// Simple AI response generator
-const generateResponse = (input: string): string => {
-    const lowerInput = input.toLowerCase().trim();
+    try {
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemma-3-27b-it:generateContent?key=${API_KEY}`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    contents,
+                    generationConfig: {
+                        temperature: 0.7,
+                        topK: 40,
+                        topP: 0.95,
+                        maxOutputTokens: 1024,
+                    },
+                    safetySettings: [
+                        {
+                            category: "HARM_CATEGORY_HARASSMENT",
+                            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                        },
+                        {
+                            category: "HARM_CATEGORY_HATE_SPEECH",
+                            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                        }
+                    ]
+                }),
+            }
+        );
 
-    // Check for greetings
-    if (lowerInput.match(/^(xin chào|chào|hello|hi|hey|alo)/)) {
-        return knowledgeBase.greetings[0];
-    }
-
-    // Check for thank you
-    if (lowerInput.match(/(cảm ơn|thank|thanks)/)) {
-        return "Không có gì! Nếu bạn có thêm câu hỏi về bài thuyết trình, đừng ngại hỏi nhé! 😊";
-    }
-
-    // Search through topics
-    for (const [pattern, data] of Object.entries(knowledgeBase.topics)) {
-        const regex = new RegExp(pattern, "i");
-        if (regex.test(lowerInput)) {
-            return data.answer;
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error("Gemini API Error:", errorData);
+            return "❌ Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại sau.";
         }
-    }
 
-    // Fallback
-    return knowledgeBase.fallback;
+        const data = await response.json();
+
+        if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+            return data.candidates[0].content.parts[0].text;
+        }
+
+        return "❌ Không nhận được phản hồi từ AI. Vui lòng thử lại.";
+    } catch (error) {
+        console.error("Error calling Gemini API:", error);
+        return "❌ Lỗi kết nối. Vui lòng kiểm tra internet và thử lại.";
+    }
 };
 
 const ChatBox = () => {
@@ -82,7 +108,7 @@ const ChatBox = () => {
     const [messages, setMessages] = useState<Message[]>([
         {
             id: 1,
-            text: "Xin chào! 👋 Tôi là trợ lý AI của trang web này. Hãy hỏi tôi về Tư tưởng Hồ Chí Minh về Chủ nghĩa Xã hội!",
+            text: "Xin chào! 👋 Tôi là trợ lý AI được hỗ trợ bởi Gemini. Hãy hỏi tôi về Tư tưởng Hồ Chí Minh về Chủ nghĩa Xã hội!",
             isBot: true,
             timestamp: new Date()
         }
@@ -99,8 +125,8 @@ const ChatBox = () => {
         scrollToBottom();
     }, [messages]);
 
-    const handleSend = () => {
-        if (!inputValue.trim()) return;
+    const handleSend = async () => {
+        if (!inputValue.trim() || isTyping) return;
 
         const userMessage: Message = {
             id: Date.now(),
@@ -110,20 +136,32 @@ const ChatBox = () => {
         };
 
         setMessages(prev => [...prev, userMessage]);
+        const currentInput = inputValue;
         setInputValue("");
         setIsTyping(true);
 
-        // Simulate AI thinking delay
-        setTimeout(() => {
+        try {
+            // Call Gemini API
+            const response = await callGeminiAPI(currentInput, messages);
+
             const botResponse: Message = {
                 id: Date.now() + 1,
-                text: generateResponse(inputValue),
+                text: response,
                 isBot: true,
                 timestamp: new Date()
             };
             setMessages(prev => [...prev, botResponse]);
+        } catch (error) {
+            const errorResponse: Message = {
+                id: Date.now() + 1,
+                text: "❌ Đã có lỗi xảy ra. Vui lòng thử lại.",
+                isBot: true,
+                timestamp: new Date()
+            };
+            setMessages(prev => [...prev, errorResponse]);
+        } finally {
             setIsTyping(false);
-        }, 800 + Math.random() * 700);
+        }
     };
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -167,7 +205,7 @@ const ChatBox = () => {
                                 <Bot className="w-6 h-6" />
                             </div>
                             <div>
-                                <h3 className="font-semibold">Trợ lý AI</h3>
+                                <h3 className="font-semibold">Trợ lý AI Gemini</h3>
                                 <p className="text-xs text-white/80">Hỏi về Tư tưởng HCM về CNXH</p>
                             </div>
                         </div>
@@ -206,12 +244,9 @@ const ChatBox = () => {
                                     <div className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center">
                                         <Bot className="w-4 h-4" />
                                     </div>
-                                    <div className="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm">
-                                        <div className="flex gap-1">
-                                            <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></span>
-                                            <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }}></span>
-                                            <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }}></span>
-                                        </div>
+                                    <div className="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm flex items-center gap-2">
+                                        <Loader2 className="w-4 h-4 animate-spin text-red-600" />
+                                        <span className="text-sm text-gray-500">Đang suy nghĩ...</span>
                                     </div>
                                 </motion.div>
                             )}
@@ -227,11 +262,12 @@ const ChatBox = () => {
                                     onChange={(e) => setInputValue(e.target.value)}
                                     onKeyPress={handleKeyPress}
                                     placeholder="Nhập câu hỏi của bạn..."
-                                    className="flex-1 px-4 py-2 border border-gray-200 rounded-full text-sm focus:outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100"
+                                    disabled={isTyping}
+                                    className="flex-1 px-4 py-2 border border-gray-200 rounded-full text-sm focus:outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 disabled:bg-gray-100"
                                 />
                                 <button
                                     onClick={handleSend}
-                                    disabled={!inputValue.trim()}
+                                    disabled={!inputValue.trim() || isTyping}
                                     className="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     <Send className="w-4 h-4" />
