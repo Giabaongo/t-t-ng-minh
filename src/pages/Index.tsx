@@ -9,6 +9,7 @@ import StatePartyEthicsSection from "@/components/sections/StatePartyEthicsSecti
 import SignificanceSection from "@/components/sections/SignificanceSection";
 import ConclusionSection from "@/components/sections/ConclusionSection";
 import VoiceReader from "@/components/VoiceReader";
+import ChatBox from "@/components/ChatBox";
 
 const Index = () => {
   return (
@@ -50,6 +51,7 @@ const Index = () => {
       <div id="conclusion">
         <ConclusionSection />
       </div>
+      <ChatBox />
       <VoiceReader />
     </main>
   );
