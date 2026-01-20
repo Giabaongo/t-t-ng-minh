@@ -76,26 +76,65 @@ const CharacteristicsSection = () => {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {characteristics.map((item, index) => (
-            <motion.div
-              key={index}
-              className="bg-primary-foreground/10 backdrop-blur-sm p-6 rounded-xl text-center group border border-gold/20 hover:border-gold/50 transition-all"
-              initial={{ opacity: 0, y: 50, rotateX: -15 }}
-              animate={isInView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
-              transition={{ delay: index * 0.1, duration: 0.6 }}
-              whileHover={{ scale: 1.05, y: -10 }}
-            >
-              <motion.div 
-                className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gold/20 flex items-center justify-center group-hover:bg-gold group-hover:scale-110 transition-all duration-300"
-                whileHover={{ rotate: 10 }}
+        <div className="relative w-full max-w-6xl mx-auto h-[800px] md:h-[900px] flex items-center justify-center overflow-visible">
+          {/* Vòng tròn viền */}
+          <motion.div 
+            className="absolute w-[600px] h-[600px] md:w-[700px] md:h-[700px] rounded-full border-2 border-dashed border-gold/30"
+            initial={{ scale: 0, rotate: 0 }}
+            animate={isInView ? { scale: 1, rotate: 360 } : {}}
+            transition={{ duration: 2, ease: "easeOut" }}
+          />
+          
+          {/* Ngôi sao trung tâm */}
+          <motion.div 
+            className="absolute w-24 h-24 rounded-full bg-gold/20 border-2 border-gold/50 flex items-center justify-center z-10"
+            initial={{ scale: 0 }}
+            animate={isInView ? { scale: 1 } : {}}
+            transition={{ delay: 0.5, type: "spring" }}
+          >
+            <Star className="w-12 h-12 text-gold fill-gold" />
+          </motion.div>
+
+          {/* 5 Cards xung quanh */}
+          {characteristics.map((item, index) => {
+            // Tính toán vị trí theo vòng tròn - card đầu tiên ở trên cùng
+            const angle = (index * 72) * (Math.PI / 180); // 72 độ cho mỗi item (360/5)
+            const radius = 350; // Bán kính vòng tròn
+            const x = Math.sin(angle) * radius;
+            const y = -Math.cos(angle) * radius;
+
+            console.log(`Card ${index}: angle=${index * 72}°, x=${x.toFixed(2)}, y=${y.toFixed(2)}`);
+
+            return (
+              <motion.div
+                key={index}
+                className="absolute bg-primary-foreground/15 backdrop-blur-sm p-6 rounded-xl text-center group border-2 border-gold/30 hover:border-gold transition-all w-44 shadow-xl"
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  marginLeft: `${x - 88}px`, // 88 = 176px (w-44) / 2
+                  marginTop: `${y - 70}px` // Ước lượng chiều cao / 2
+                }}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ 
+                  opacity: 1, 
+                  scale: 1
+                }}
+                transition={{ delay: 0.7 + index * 0.15, duration: 0.8, type: "spring", bounce: 0.4 }}
+                whileHover={{ scale: 1.15, zIndex: 20 }}
               >
-                <item.icon className="w-8 h-8 text-gold group-hover:text-revolutionary-dark transition-colors" />
+                <motion.div 
+                  className="w-16 h-16 mx-auto mb-3 rounded-full bg-gold/30 flex items-center justify-center group-hover:bg-gold transition-all duration-300"
+                  whileHover={{ rotate: 360, scale: 1.2 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <item.icon className="w-8 h-8 text-gold group-hover:text-revolutionary-dark transition-colors" />
+                </motion.div>
+                <h3 className="text-sm font-bold text-primary-foreground mb-2 font-sans leading-tight">{item.title}</h3>
+                <p className="text-xs text-primary-foreground/70 leading-snug">{item.description}</p>
               </motion.div>
-              <h3 className="text-lg font-bold text-primary-foreground mb-2 font-sans">{item.title}</h3>
-              <p className="text-sm text-primary-foreground/70">{item.description}</p>
-            </motion.div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

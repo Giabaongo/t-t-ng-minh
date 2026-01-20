@@ -8,37 +8,56 @@ import PathwaySection from "@/components/sections/PathwaySection";
 import StatePartyEthicsSection from "@/components/sections/StatePartyEthicsSection";
 import SignificanceSection from "@/components/sections/SignificanceSection";
 import ConclusionSection from "@/components/sections/ConclusionSection";
-import ChatBox from "@/components/ChatBox";
+import Chatbox from "@/components/Chatbox";
+import VoiceReader from "@/components/VoiceReader";
 
 const Index = () => {
   return (
     <main className="min-h-screen">
       <Navigation />
-      <HeroSection />
-      <ConceptSection />
+
+      <div id="hero">
+        <HeroSection />
+      </div>
+
+      <div id="concept">
+        <ConceptSection />
+      </div>
+
       <div id="goals">
         <GoalsSection />
       </div>
+
       <div id="characteristics">
         <CharacteristicsSection />
       </div>
+
       <div id="forces">
         <DrivingForcesSection />
       </div>
+
       <div id="pathway">
         <PathwaySection />
       </div>
+
       <div id="state">
         <StatePartyEthicsSection />
       </div>
+
       <div id="significance">
         <SignificanceSection />
       </div>
-      <ConclusionSection />
-      <ChatBox />
+      
+      <div id="conclusion">
+        <ConclusionSection />
+      </div>
+
+      <Chatbox />
+      <VoiceReader />
     </main>
   );
 };
+
 
 export default Index;
 

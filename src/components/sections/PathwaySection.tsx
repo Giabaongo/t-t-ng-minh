@@ -1,7 +1,8 @@
 import { useInView } from "@/hooks/useInView";
 import { MapPin, Ban, Clock, Puzzle, ArrowRight, Star } from "lucide-react";
 import { motion } from "framer-motion";
-import pathwaySocialismArt from "@/assets/pathway-socialism-art.png";
+
+const myPathwayImage = "https://res.cloudinary.com/dgds0gqq1/image/upload/v1768834892/article_bnddfi.jpg";
 
 const steps = [
   {
@@ -36,7 +37,7 @@ const PathwaySection = () => {
   return (
     <section ref={ref} className="section-alt overflow-hidden relative">
       {/* Decorative stars */}
-      <motion.div
+      <motion.div 
         className="absolute top-20 right-20 text-gold/10"
         animate={{ rotate: 360, scale: [1, 1.1, 1] }}
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -44,17 +45,8 @@ const PathwaySection = () => {
         <Star className="w-40 h-40 fill-current" />
       </motion.div>
 
-      {/* Floating Artistic Image */}
-      <motion.div
-        className="absolute -left-10 top-1/2 -translate-y-1/2 w-48 h-48 opacity-20 pointer-events-none hidden lg:block"
-        animate={{ y: [0, -20, 0], rotate: [0, 3, 0, -3, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <img src={pathwaySocialismArt} alt="" className="w-full h-full object-contain rounded-2xl" />
-      </motion.div>
-
       <div className="section-container relative z-10">
-        <motion.div
+        <motion.div 
           className="text-center mb-16"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -70,63 +62,65 @@ const PathwaySection = () => {
           </h2>
         </motion.div>
 
-        <div className="relative">
-          {/* Connection line for desktop */}
-          <motion.div
-            className="hidden md:block absolute top-20 left-0 right-0 h-1 z-0"
-            initial={{ scaleX: 0 }}
-            animate={isInView ? { scaleX: 1 } : {}}
-            transition={{ duration: 1, delay: 0.3 }}
-            style={{ originX: 0 }}
-          >
-            <div className="w-full h-full bg-gradient-to-r from-gold via-primary to-gold rounded-full" />
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative z-10">
+        {/* Layout 2 cột: Nội dung bên trái, Ảnh bên phải */}
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          {/* Cột nội dung */}
+          <div className="space-y-6">
             {steps.map((step, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 50 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                initial={{ opacity: 0, x: -50 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.2 + index * 0.15, duration: 0.6 }}
               >
-                <motion.div
-                  className="feature-card text-center h-full golden-border hover:border-gold/50 relative group"
-                  whileHover={{ scale: 1.05, y: -10 }}
+                <motion.div 
+                  className="feature-card golden-border hover:border-gold/50 relative group overflow-hidden"
+                  whileHover={{ scale: 1.02 }}
                 >
-                  {/* Arrow connector */}
-                  {index < steps.length - 1 && (
-                    <div className="hidden md:block absolute -right-3 top-20 text-gold z-20">
-                      <motion.div
-                        animate={{ x: [0, 5, 0] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                      >
-                        <ArrowRight className="w-6 h-6" />
-                      </motion.div>
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-500" />
+                  
+                  <div className="flex items-center gap-4 mb-3 relative z-10">
+                    <motion.div 
+                      className="w-14 h-14 rounded-full bg-gradient-to-br from-[#B8651B] to-[#8B4513] flex items-center justify-center text-white font-bold text-xl font-sans shadow-lg flex-shrink-0"
+                      whileHover={{ rotate: 360, scale: 1.1 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      {step.number}
+                    </motion.div>
+                    
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-foreground mb-1 font-sans">{step.title}</h3>
+                      <p className="text-sm text-muted-foreground">{step.description}</p>
                     </div>
-                  )}
 
-                  <motion.div
-                    className="w-14 h-14 mx-auto mb-4 rounded-full bg-gradient-to-br from-gold to-primary flex items-center justify-center text-primary-foreground font-bold text-xl font-sans shadow-lg"
-                    whileHover={{ rotate: 360, scale: 1.1 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    {step.number}
-                  </motion.div>
-
-                  <motion.div
-                    className="w-10 h-10 mx-auto mb-3 rounded-lg bg-primary/10 group-hover:bg-primary flex items-center justify-center transition-all"
-                    whileHover={{ rotate: 10 }}
-                  >
-                    <step.icon className="w-5 h-5 text-primary group-hover:text-primary-foreground transition-colors" />
-                  </motion.div>
-
-                  <h3 className="text-base font-bold text-foreground mb-2 font-sans">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground">{step.description}</p>
+                    <motion.div
+                      className="w-10 h-10 rounded-lg bg-[#E8D4D4] flex items-center justify-center flex-shrink-0"
+                      whileHover={{ scale: 1.1, rotate: 10 }}
+                    >
+                      <step.icon className="w-5 h-5 text-[#8B4513]" />
+                    </motion.div>
+                  </div>
                 </motion.div>
               </motion.div>
             ))}
           </div>
+
+          {/* Cột hình ảnh */}
+          {myPathwayImage && (
+            <motion.div 
+              initial={{ opacity: 0, x: 50 }}
+              animate={isInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <div className="relative rounded-2xl overflow-hidden golden-border aspect-video">
+                <img 
+                  src={myPathwayImage}
+                  alt="Con đường đi lên Chủ nghĩa Xã hội"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </motion.div>
+          )}
         </div>
       </div>
     </section>
