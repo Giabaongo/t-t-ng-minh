@@ -9,20 +9,31 @@ interface Message {
     timestamp: Date;
 }
 
-// System prompt để giới hạn chatbot chỉ trả lời về nội dung bài thuyết trình
-const SYSTEM_PROMPT = `Bạn là trợ lý AI chuyên về bài thuyết trình "Tư tưởng Hồ Chí Minh về Chủ nghĩa Xã hội".
+// System prompt mở rộng phạm vi trả lời về triết học
+const SYSTEM_PROMPT = `Bạn là trợ lý AI chuyên về triết học và tư tưởng chính trị, đặc biệt là Tư tưởng Hồ Chí Minh về Chủ nghĩa Xã hội.
 
-CHỈ trả lời các câu hỏi liên quan đến các chủ đề sau:
-1. Khái niệm CNXH theo Hồ Chí Minh: CNXH là chế độ xã hội ưu việt, lấy con người làm trung tâm, "dân giàu nước mạnh"
-2. Mục tiêu CNXH: Kinh tế phát triển, đời sống ấm no, công bằng xã hội
-3. Đặc trưng CNXH Việt Nam: Phát triển lực lượng sản xuất, nhà nước của dân-do dân-vì dân, văn hóa đạo đức "hồng chuyên"
-4. Động lực xây dựng CNXH: Nhân dân là động lực quyết định, kết hợp lợi ích cá nhân-tập thể, vai trò khoa học kỹ thuật
-5. Con đường đi lên CNXH: Quá độ từ nước nông nghiệp, phù hợp điều kiện Việt Nam, độc lập gắn liền CNXH
-6. Vai trò Đảng và Nhà nước: Đảng lãnh đạo, Nhà nước quản lý, Nhân dân làm chủ
+BẠN CÓ THỂ TRẢ LỜI các câu hỏi về:
 
-Nếu câu hỏi KHÔNG liên quan đến các chủ đề trên, hãy lịch sự từ chối và hướng dẫn người dùng hỏi về nội dung bài thuyết trình.
+📚 **TƯ TƯỞNG HỒ CHÍ MINH VỀ CNXH:**
+- Khái niệm, mục tiêu, đặc trưng CNXH
+- Động lực xây dựng, con đường đi lên CNXH
+- Vai trò Đảng và Nhà nước
 
-Trả lời bằng tiếng Việt, ngắn gọn, súc tích (tối đa 200 từ). Sử dụng bullet points khi cần thiết.`;
+🏛️ **TRIẾT HỌC NÓI CHUNG:**
+- Triết học phương Đông: Khổng Tử, Lão Tử, Mạnh Tử, Đức Phật
+- Triết học phương Tây cổ đại: Socrates, Plato, Aristotle
+- Triết học hiện đại: Descartes, Kant, Hegel, Nietzsche
+- Chủ nghĩa Mác-Lênin: Karl Marx, Friedrich Engels, Lenin
+- Triết học hiện sinh: Sartre, Camus, Heidegger
+- Triết học chính trị: Machiavelli, Rousseau, John Locke
+
+🌟 **CÁC VĨ NHÂN VÀ TƯ TƯỞNG:**
+- So sánh các trường phái triết học
+- Ảnh hưởng của triết học đến xã hội
+- Các tư tưởng gia nổi tiếng trong lịch sử
+
+Trả lời bằng tiếng Việt, rõ ràng, dễ hiểu. Có thể sử dụng bullet points, emoji để minh họa.
+Khi được hỏi về nội dung bài thuyết trình TTHCM, hãy liên hệ với các triết gia khác nếu phù hợp.`;
 
 // Gemini API call function
 const callGeminiAPI = async (userMessage: string, conversationHistory: Message[]): Promise<string> => {
@@ -40,7 +51,7 @@ const callGeminiAPI = async (userMessage: string, conversationHistory: Message[]
         },
         {
             role: "model",
-            parts: [{ text: "Tôi hiểu. Tôi sẽ chỉ trả lời các câu hỏi liên quan đến bài thuyết trình Tư tưởng Hồ Chí Minh về Chủ nghĩa Xã hội." }]
+            parts: [{ text: "Tôi hiểu. Tôi sẽ trả lời các câu hỏi về Tư tưởng Hồ Chí Minh về CNXH, triết học nói chung và các vĩ nhân triết học." }]
         },
         // Add conversation history (last 6 messages for context)
         ...conversationHistory.slice(-6).map(msg => ({
@@ -108,7 +119,7 @@ const ChatBox = () => {
     const [messages, setMessages] = useState<Message[]>([
         {
             id: 1,
-            text: "Xin chào! 👋 Tôi là trợ lý AI được hỗ trợ bởi Gemini. Hãy hỏi tôi về Tư tưởng Hồ Chí Minh về Chủ nghĩa Xã hội!",
+            text: "Xin chào! 👋 Tôi là trợ lý AI về triết học. Hãy hỏi tôi về:\n• Tư tưởng Hồ Chí Minh về CNXH\n• Triết học phương Đông/Tây\n• Các vĩ nhân triết học như Khổng Tử, Socrates, Marx...",
             isBot: true,
             timestamp: new Date()
         }
@@ -205,8 +216,8 @@ const ChatBox = () => {
                                 <Bot className="w-6 h-6" />
                             </div>
                             <div>
-                                <h3 className="font-semibold">Trợ lý AI Gemini</h3>
-                                <p className="text-xs text-white/80">Hỏi về Tư tưởng HCM về CNXH</p>
+                                <h3 className="font-semibold">Trợ lý Triết học AI</h3>
+                                <p className="text-xs text-white/80">TTHCM • Triết học • Vĩ nhân</p>
                             </div>
                         </div>
 
