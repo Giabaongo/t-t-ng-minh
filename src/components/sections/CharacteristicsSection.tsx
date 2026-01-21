@@ -76,10 +76,10 @@ const CharacteristicsSection = () => {
           </h2>
         </motion.div>
 
-        <div className="relative w-full max-w-6xl mx-auto h-[800px] md:h-[900px] flex items-center justify-center overflow-visible">
+        <div className="relative w-full max-w-6xl my-[-4rem] mx-auto h-[800px] md:h-[900px] flex items-center justify-center overflow-visible">
           {/* Vòng tròn viền */}
           <motion.div
-            className="absolute w-[600px] h-[600px] md:w-[700px] md:h-[700px] rounded-full border-2 border-dashed border-gold/30"
+            className="absolute w-[500px] h-[500px] md:w-[600px] md:h-[600px] rounded-full border-2 border-dashed border-gold/30"
             initial={{ scale: 0, rotate: 0 }}
             animate={isInView ? { scale: 1, rotate: 360 } : {}}
             transition={{ duration: 2, ease: "easeOut" }}
@@ -99,7 +99,7 @@ const CharacteristicsSection = () => {
           {characteristics.map((item, index) => {
             // Tính toán vị trí theo vòng tròn - card đầu tiên ở trên cùng
             const angle = (index * 72) * (Math.PI / 180); // 72 độ cho mỗi item (360/5)
-            const radius = 350; // Bán kính vòng tròn
+            const radius = 300; // Bán kính vòng tròn
             const x = Math.sin(angle) * radius;
             const y = -Math.cos(angle) * radius;
 
