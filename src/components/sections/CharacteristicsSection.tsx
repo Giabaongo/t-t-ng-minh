@@ -37,21 +37,21 @@ const CharacteristicsSection = () => {
   return (
     <section ref={ref} className="relative overflow-hidden">
       {/* Background with artistic overlay */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${hcmUnity})` }}
       />
       <div className="absolute inset-0 bg-gradient-to-br from-revolutionary-dark/95 via-revolutionary-red/90 to-revolutionary-dark/95" />
-      
+
       {/* Decorative elements */}
-      <motion.div 
+      <motion.div
         className="absolute top-10 right-10 text-gold/20"
         animate={{ rotate: 360 }}
         transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
       >
         <Star className="w-24 h-24 fill-current" />
       </motion.div>
-      <motion.div 
+      <motion.div
         className="absolute bottom-10 left-10 text-gold/10"
         animate={{ rotate: -360 }}
         transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
@@ -60,7 +60,7 @@ const CharacteristicsSection = () => {
       </motion.div>
 
       <div className="section-container relative z-10">
-        <motion.div 
+        <motion.div
           className="text-center mb-12"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -72,21 +72,21 @@ const CharacteristicsSection = () => {
             <span className="w-8 h-0.5 bg-gold" />
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mt-2">
-            Đặc trưng cơ bản của xã hội <span className="shimmer-text">XHCN</span>
+            Đặc trưng cơ bản của <span className="shimmer-text">XHCN</span>
           </h2>
         </motion.div>
 
         <div className="relative w-full max-w-6xl mx-auto h-[800px] md:h-[900px] flex items-center justify-center overflow-visible">
           {/* Vòng tròn viền */}
-          <motion.div 
+          <motion.div
             className="absolute w-[600px] h-[600px] md:w-[700px] md:h-[700px] rounded-full border-2 border-dashed border-gold/30"
             initial={{ scale: 0, rotate: 0 }}
             animate={isInView ? { scale: 1, rotate: 360 } : {}}
             transition={{ duration: 2, ease: "easeOut" }}
           />
-          
+
           {/* Ngôi sao trung tâm */}
-          <motion.div 
+          <motion.div
             className="absolute w-24 h-24 rounded-full bg-gold/20 border-2 border-gold/50 flex items-center justify-center z-10"
             initial={{ scale: 0 }}
             animate={isInView ? { scale: 1 } : {}}
@@ -116,14 +116,14 @@ const CharacteristicsSection = () => {
                   marginTop: `${y - 70}px` // Ước lượng chiều cao / 2
                 }}
                 initial={{ opacity: 0, scale: 0 }}
-                animate={{ 
-                  opacity: 1, 
+                animate={{
+                  opacity: 1,
                   scale: 1
                 }}
                 transition={{ delay: 0.7 + index * 0.15, duration: 0.8, type: "spring", bounce: 0.4 }}
                 whileHover={{ scale: 1.15, zIndex: 20 }}
               >
-                <motion.div 
+                <motion.div
                   className="w-16 h-16 mx-auto mb-3 rounded-full bg-gold/30 flex items-center justify-center group-hover:bg-gold transition-all duration-300"
                   whileHover={{ rotate: 360, scale: 1.2 }}
                   transition={{ duration: 0.6 }}
