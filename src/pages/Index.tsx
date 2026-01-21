@@ -7,6 +7,7 @@ import DrivingForcesSection from "@/components/sections/DrivingForcesSection";
 import PathwaySection from "@/components/sections/PathwaySection";
 import StatePartyEthicsSection from "@/components/sections/StatePartyEthicsSection";
 import SignificanceSection from "@/components/sections/SignificanceSection";
+import VideoResourcesSection from "@/components/sections/VideoResourcesSection";
 import ConclusionSection from "@/components/sections/ConclusionSection";
 import VoiceReader from "@/components/VoiceReader";
 import ChatBox from "@/components/ChatBox";
@@ -47,7 +48,11 @@ const Index = () => {
       <div id="significance">
         <SignificanceSection />
       </div>
-      
+
+      <div id="videos">
+        <VideoResourcesSection />
+      </div>
+
       <div id="conclusion">
         <ConclusionSection />
       </div>
