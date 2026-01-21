@@ -11,6 +11,7 @@ const sections = [
   { id: "pathway", label: "Con đường" },
   { id: "state", label: "Nhà nước" },
   { id: "significance", label: "Ý nghĩa" },
+  { id: "gallery", label: "Thư viện" },
 ];
 
 const Navigation = () => {
